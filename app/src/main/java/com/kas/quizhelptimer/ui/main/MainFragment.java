@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 @AndroidEntryPoint
 public class MainFragment extends Fragment {
 
-    public MainViewModel mViewModel;
+    public MainViewModel mainViewModel;
 
     /*    public static MainFragment newInstance() {
             return new MainFragment();
@@ -40,8 +40,9 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         // TODO: Use the ViewModel
+
     }
 
 }

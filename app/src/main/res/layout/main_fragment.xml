@@ -1,20 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.MainFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="MainFragment"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.main.MainFragment">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/main_questions_number_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Number Questions"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/main_max_time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max time"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/main_questions_number_title" />
+
+        <EditText
+            android:id="@+id/main_questions_number_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/main_questions_number_title"
+            app:layout_constraintStart_toStartOf="@+id/main_questions_number_title"
+            app:layout_constraintTop_toBottomOf="@+id/main_questions_number_title" />
+
+        <EditText
+            android:id="@+id/main_max_time_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/main_max_time_title"
+            app:layout_constraintStart_toStartOf="@+id/main_max_time_title"
+            app:layout_constraintTop_toBottomOf="@+id/main_questions_number_title" />
+
+        <TextView
+            android:id="@+id/main_questions_left_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Number Questions"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_questions_number_value" />
+
+        <EditText
+            android:id="@+id/main_questions_left_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            android:textSize="20dp"
+            app:layout_constraintBottom_toTopOf="@+id/button_main_action"
+            app:layout_constraintEnd_toEndOf="@+id/main_questions_left_title"
+            app:layout_constraintStart_toStartOf="@+id/main_questions_left_title"
+            app:layout_constraintTop_toBottomOf="@+id/main_questions_left_title" />
+
+
+        <Button
+            android:id="@+id/button_main_action"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="32dp"
+            android:paddingVertical="32dp"
+            android:text="Start Quiz"
+            android:textSize="36dp"
+            app:layout_constraintBottom_toTopOf="@+id/main_left_time_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/main_questions_number_value" />
+
+        <TextView
+            android:id="@+id/main_left_time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Time Left"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/main_left_time_value"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
+        <TextView
+            android:id="@+id/main_avg_time_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Average time"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/main_left_time_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/main_left_time_title"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <EditText
+            android:id="@+id/main_left_time_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textSize="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/main_left_time_title"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/main_left_time_title" />
+
+        <EditText
+            android:id="@+id/main_avg_time_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="20dp"
+
+            app:layout_constraintBottom_toBottomOf="@+id/main_left_time_value"
+            app:layout_constraintEnd_toEndOf="@+id/main_avg_time_title"
+            app:layout_constraintStart_toStartOf="@+id/main_avg_time_title"
+            app:layout_constraintTop_toBottomOf="@+id/main_left_time_title" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent="0.5" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
