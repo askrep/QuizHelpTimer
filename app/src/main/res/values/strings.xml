@@ -2,4 +2,9 @@
     <string name="app_name">QuizHelpTimer</string>
     <string name="main_action_button_start">Start Quiz</string>
     <string name="main_action_button_answer">Is Answered</string>
+    <string name="main_max_time_title">Max time</string>
+    <string name="main_number_questions_title">Number Questions</string>
+    <string name="main_left_questions_title">Left Questions</string>
+    <string name="main_time_left_title">Time Left</string>
+    <string name="main_average_time_title">Average time</string>
 </resources>

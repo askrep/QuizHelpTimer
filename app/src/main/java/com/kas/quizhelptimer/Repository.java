@@ -21,4 +21,13 @@ public class Repository {
         this.remoteDataSource = remoteDataSource;
         Log.d(TAG, "Repository: created");
     }
+    
+    public String getAverageQuestionTime(String numberQuestion, String time) {
+        int number = Integer.parseInt(numberQuestion);
+        int seconds = Integer.parseInt(time) * 60;
+        String result = String.valueOf(localDataSource.calcAverageQuestionTimeInSeconds(number, seconds));
+        Log.d(TAG, "getAverageQuestionTimeSeconds: " + result);
+        return result;
+    }
+    
 }

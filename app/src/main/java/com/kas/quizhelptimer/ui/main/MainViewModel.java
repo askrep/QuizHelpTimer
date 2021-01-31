@@ -1,9 +1,7 @@
 package com.kas.quizhelptimer.ui.main;
 
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -23,38 +21,53 @@ public class MainViewModel extends ViewModel {
     private static final String TAG = "#_MainViewModel";
     private Repository repository;
     
+    private LocalTime startLocalTime;
+    
+    /* VIEW FIELDS LIVE DATA*/
     private MutableLiveData<String> numberQuestionsLiveData = new MutableLiveData<>("");
     private MutableLiveData<String> maxTimeLiveData = new MutableLiveData<>("");
-    private MutableLiveData<String> startTimeLiveData = new MutableLiveData<>("");
-    private MutableLiveData<String> answerTimeCounterLiveData = new MutableLiveData<>("");
-    private MutableLiveData<Integer> leftQuestionsLiveData = new MutableLiveData<>(0);
-    private MutableLiveData<Boolean> quizStartedLiveData = new MutableLiveData<>(false);
-    private LocalTime startLocalTime;
+    private MutableLiveData<String> leftQuestionsLiveData = new MutableLiveData<>("");
+    private MutableLiveData<String> leftTimeToAnswerLiveData = new MutableLiveData<>("");
+    private MutableLiveData<String> averageTimeToAnswerLiveData = new MutableLiveData<>("");
+    
+    /* SERVICE LIVE DATA*/
+    private MutableLiveData<String> startTimeLiveData = new MutableLiveData<>("0");
+    
+    private MutableLiveData<Boolean> isQuizStartedLiveData = new MutableLiveData<>(false);
     
     @Inject
     public MainViewModel(Repository repository) {
         this.repository = repository;
     }
     
-    public void onStartPressed() {
-        Log.d(TAG, "onStartPressed: TRUE");
-        quizStartedLiveData.setValue(true);
-        
-        startLocalTime = LocalTime.now();
-        Log.d(TAG, "onStartPressed: startTime == " + this.startLocalTime.getHour());
-        Log.d(TAG, "onStartPressed: startTime == " + this.startLocalTime.getMinute());
-        Log.d(TAG, "onStartPressed: startTime == " + this.startLocalTime.getSecond());
-        
+    private String getAverageQuestionTime() {
+        return repository.getAverageQuestionTime(numberQuestionsLiveData.getValue(), maxTimeLiveData.getValue());
     }
     
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    public void onQuestionsNumberChanged(String value) {
+        numberQuestionsLiveData.setValue(value);
+        if (!numberQuestionsLiveData.getValue().equals("") && !maxTimeLiveData.getValue().equals(""))
+            averageTimeToAnswerLiveData.setValue(getAverageQuestionTime());
+    }
+    
+    public void onMaxTimeChanged(String value) {
+        maxTimeLiveData.setValue(value);
+        if (!numberQuestionsLiveData.getValue().equals("0") && !maxTimeLiveData.getValue().equals("0"))
+            averageTimeToAnswerLiveData.setValue(getAverageQuestionTime());
+    }
+    
+    public void onStartPressed() {
+        isQuizStartedLiveData.setValue(true);
+        startLocalTime = LocalTime.now();
+    }
+    
     public void onAnsweredPressed() {
         Log.d(TAG, "onAnsweredPressed: TRUE" + Duration.between(startLocalTime, LocalTime.now()).getSeconds());
         
     }
     
     public boolean getActionButtonState() {
-        return quizStartedLiveData.getValue();
+        return isQuizStartedLiveData.getValue();
     }
     
     public LiveData<String> getNumberQuestionsLiveData() {
@@ -81,27 +94,43 @@ public class MainViewModel extends ViewModel {
         this.startTimeLiveData.setValue(startTime);
     }
     
-    public LiveData<String> getAnswerTimeCounterLiveData() {
-        return answerTimeCounterLiveData;
+    public LiveData<String> getLeftTimeToAnswerLiveData() {
+        return leftTimeToAnswerLiveData;
     }
     
-    public void setAnswerTimeCounterLiveData(String answerTimeCounter) {
-        this.answerTimeCounterLiveData.setValue(answerTimeCounter);
+    public void setLeftTimeToAnswerLiveData(String answerTimeCounter) {
+        this.leftTimeToAnswerLiveData.setValue(answerTimeCounter);
     }
     
-    public LiveData<Integer> getLeftQuestionsLiveData() {
+    public LiveData<String> getLeftQuestionsLiveData() {
         return leftQuestionsLiveData;
     }
     
-    public void setLeftQuestionsLiveData(Integer leftQuestions) {
+    public void setLeftQuestionsLiveData(String leftQuestions) {
         this.leftQuestionsLiveData.setValue(leftQuestions);
     }
     
-    public LiveData<Boolean> getQuizStartedLiveData() {
-        return quizStartedLiveData;
+    public LiveData<Boolean> getIsQuizStartedLiveData() {
+        return isQuizStartedLiveData;
     }
     
-    public void setQuizStartedLiveData(Boolean quizStarted) {
-        this.quizStartedLiveData.setValue(quizStarted);
+    public void setIsQuizStartedLiveData(Boolean quizStarted) {
+        this.isQuizStartedLiveData.setValue(quizStarted);
+    }
+    
+    public LiveData<String> getAverageTimeToAnswerLiveData() {
+        return averageTimeToAnswerLiveData;
+    }
+    
+    public boolean onResetClicked() {
+        isQuizStartedLiveData.setValue(false);
+        numberQuestionsLiveData.setValue("");
+        maxTimeLiveData.setValue("");
+        leftQuestionsLiveData.setValue("");
+        leftTimeToAnswerLiveData.setValue("");
+        averageTimeToAnswerLiveData.setValue("");
+        Log.d(TAG, "onResetClicked: ");
+        
+        return true;
     }
 }
