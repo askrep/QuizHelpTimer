@@ -33,11 +33,12 @@
 
         <EditText
             android:id="@+id/main_questions_number_value"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="numberSigned"
+            android:inputType="numberDecimal"
+            android:minWidth="80dp"
             android:singleLine="true"
-            android:text=""
+            android:text="1"
             android:textSize="@dimen/main_edit_text_size"
             app:layout_constraintEnd_toEndOf="@+id/main_questions_number_title"
             app:layout_constraintStart_toStartOf="@+id/main_questions_number_title"
@@ -49,7 +50,7 @@
             android:layout_height="wrap_content"
             android:inputType="datetime"
             android:singleLine="true"
-            android:text=""
+            android:text="1"
             android:textSize="@dimen/main_edit_text_size"
             app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_value"
             app:layout_constraintEnd_toEndOf="@+id/main_max_time_title"
@@ -160,5 +161,45 @@
             android:orientation="vertical"
             app:layout_constraintGuide_begin="20dp"
             app:layout_constraintGuide_percent="0.5" />
+
+        <ImageButton
+            android:id="@+id/button_remove_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_value"
+            app:layout_constraintEnd_toStartOf="@+id/main_questions_number_value"
+            app:layout_constraintTop_toTopOf="@+id/main_questions_number_value"
+            app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
+
+        <ImageButton
+            android:id="@+id/button_add_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_value"
+            app:layout_constraintStart_toEndOf="@+id/main_questions_number_value"
+            app:layout_constraintTop_toTopOf="@+id/main_questions_number_value"
+
+            app:srcCompat="@drawable/ic_baseline_add_circle_24" />
+
+        <ImageButton
+            android:id="@+id/button_remove_max_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/main_max_time_value"
+            app:layout_constraintEnd_toStartOf="@+id/main_max_time_value"
+            app:layout_constraintTop_toTopOf="@+id/main_max_time_value"
+            app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
+
+        <ImageButton
+            android:id="@+id/button_add_max_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/main_max_time_value"
+            app:layout_constraintStart_toEndOf="@+id/main_max_time_value"
+            app:layout_constraintTop_toTopOf="@+id/main_max_time_value"
+            app:srcCompat="@drawable/ic_baseline_add_circle_24" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

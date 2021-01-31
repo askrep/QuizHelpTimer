@@ -24,8 +24,8 @@ public class MainViewModel extends ViewModel {
     private LocalTime startLocalTime;
     
     /* VIEW FIELDS LIVE DATA*/
-    private MutableLiveData<String> numberQuestionsLiveData = new MutableLiveData<>("");
-    private MutableLiveData<String> maxTimeLiveData = new MutableLiveData<>("");
+    private MutableLiveData<String> questionsNumberLiveData = new MutableLiveData<>("0");
+    private MutableLiveData<String> maxTimeLiveData = new MutableLiveData<>("0");
     private MutableLiveData<String> leftQuestionsLiveData = new MutableLiveData<>("");
     private MutableLiveData<String> leftTimeToAnswerLiveData = new MutableLiveData<>("");
     private MutableLiveData<String> averageTimeToAnswerLiveData = new MutableLiveData<>("");
@@ -41,18 +41,18 @@ public class MainViewModel extends ViewModel {
     }
     
     private String getAverageQuestionTime() {
-        return repository.getAverageQuestionTime(numberQuestionsLiveData.getValue(), maxTimeLiveData.getValue());
+        return repository.getAverageQuestionTime(questionsNumberLiveData.getValue(), maxTimeLiveData.getValue());
     }
     
     public void onQuestionsNumberChanged(String value) {
-        numberQuestionsLiveData.setValue(value);
-        if (!numberQuestionsLiveData.getValue().equals("") && !maxTimeLiveData.getValue().equals(""))
+        questionsNumberLiveData.setValue(value);
+        if (!questionsNumberLiveData.getValue().equals("") && !maxTimeLiveData.getValue().equals(""))
             averageTimeToAnswerLiveData.setValue(getAverageQuestionTime());
     }
     
     public void onMaxTimeChanged(String value) {
         maxTimeLiveData.setValue(value);
-        if (!numberQuestionsLiveData.getValue().equals("0") && !maxTimeLiveData.getValue().equals("0"))
+        if (!questionsNumberLiveData.getValue().equals("0") && !maxTimeLiveData.getValue().equals("0"))
             averageTimeToAnswerLiveData.setValue(getAverageQuestionTime());
     }
     
@@ -70,12 +70,12 @@ public class MainViewModel extends ViewModel {
         return isQuizStartedLiveData.getValue();
     }
     
-    public LiveData<String> getNumberQuestionsLiveData() {
-        return numberQuestionsLiveData;
+    public LiveData<String> getQuestionsNumberLiveData() {
+        return questionsNumberLiveData;
     }
     
-    public void setNumberQuestionsLiveData(String numberQuestions) {
-        numberQuestionsLiveData.setValue(numberQuestions);
+    public void setQuestionsNumberLiveData(String numberQuestions) {
+        questionsNumberLiveData.setValue(numberQuestions);
     }
     
     public LiveData<String> getMaxTimeLiveData() {
@@ -124,7 +124,7 @@ public class MainViewModel extends ViewModel {
     
     public boolean onResetClicked() {
         isQuizStartedLiveData.setValue(false);
-        numberQuestionsLiveData.setValue("");
+        questionsNumberLiveData.setValue("");
         maxTimeLiveData.setValue("");
         leftQuestionsLiveData.setValue("");
         leftTimeToAnswerLiveData.setValue("");
@@ -132,5 +132,51 @@ public class MainViewModel extends ViewModel {
         Log.d(TAG, "onResetClicked: ");
         
         return true;
+    }
+    
+    public String getValidStringFormat(CharSequence charSequence) {
+        Log.d(TAG, "getValidStringFormat: charSequence " + charSequence);
+        if (charSequence == null || charSequence.length() == 0) return "1";
+        String string = charSequence.toString();
+        
+        if (string.startsWith("0") || string.startsWith("-")) {
+            string = string.replaceFirst("[-,0]", "1");
+            
+        }
+        int number = Integer.parseInt(string);
+        if (number <= 0) return "1";
+        if (number > 999) return "999";
+        Log.d(TAG, "getValidStringFormat: " + string);
+        return string;
+    }
+    
+    public void decrementQuestionsNumber() {
+        int number = Integer.parseInt(questionsNumberLiveData.getValue());
+        if (number > 1) {
+            questionsNumberLiveData.setValue(String.valueOf(number - 1));
+        }
+    }
+    
+    public void incrementQuestionsNumber() {
+        int number = Integer.parseInt(questionsNumberLiveData.getValue());
+        if (number >= 0 && number <= 999) {
+            questionsNumberLiveData.setValue(String.valueOf(number + 1));
+        }
+    }
+    
+    public void decrementMaxTime() {
+        int timeMinutes = Integer.parseInt(maxTimeLiveData.getValue());
+    
+        if (timeMinutes > 1) {
+            maxTimeLiveData.setValue(String.valueOf(timeMinutes - 1));
+        }
+    }
+    
+    public void incrementMaxTime() {
+        int timeMinutes = Integer.parseInt(maxTimeLiveData.getValue());
+    
+        if (timeMinutes >= 0 && timeMinutes <= 999) {
+            maxTimeLiveData.setValue(String.valueOf(timeMinutes + 1));
+        }
     }
 }

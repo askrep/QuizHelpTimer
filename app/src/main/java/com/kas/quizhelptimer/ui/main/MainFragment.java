@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.kas.quizhelptimer.R;
@@ -33,6 +34,10 @@ public class MainFragment extends Fragment {
     public MainViewModel mainViewModel;
     Boolean isQuizStarted;
     private Button actionButton;
+    private ImageButton buttonRemoveQuestions;
+    private ImageButton buttonAddQuestions;
+    private ImageButton buttonRemoveMaxTime;
+    private ImageButton buttonAddMaxTime;
     
     @Inject
     public MainFragment() {
@@ -53,6 +58,11 @@ public class MainFragment extends Fragment {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
         
         actionButton = binding.buttonMainAction;
+        buttonRemoveQuestions = binding.buttonRemoveQuestions;
+        buttonAddQuestions = binding.buttonAddQuestions;
+        buttonRemoveMaxTime = binding.buttonRemoveMaxTime;
+        buttonAddMaxTime = binding.buttonAddMaxTime;
+        
         EditText mainQuestionsNumberValue = binding.mainQuestionsNumberValue;
         
         /** init if quiz was started */
@@ -63,8 +73,9 @@ public class MainFragment extends Fragment {
         }
         
         /** init fields and buttons*/
-        initQuestionsNumber(mainQuestionsNumberValue);
-        initMaxTime();
+    /*    initQuestionsNumber(mainQuestionsNumberValue);
+        initMaxTime();*/
+        initAscendingDescendingButtons();
         initActionButton(actionButton);
         initTextFieldsObservers();
         initResetButtonAction();
@@ -72,74 +83,88 @@ public class MainFragment extends Fragment {
         
     }
     
+    private void initAscendingDescendingButtons() {
+        
+        buttonRemoveQuestions.setOnClickListener(view -> {
+            mainViewModel.decrementQuestionsNumber();
+        });
+        
+        buttonAddQuestions.setOnClickListener(view -> {
+            mainViewModel.incrementQuestionsNumber();
+        });
+        
+        buttonRemoveMaxTime.setOnClickListener(view -> {
+            mainViewModel.decrementMaxTime();
+        });
+        buttonAddMaxTime.setOnClickListener(view -> {
+            mainViewModel.incrementMaxTime();
+        });
+        
+    }
+    
     private void initTextFieldsObservers() {
- /*       mainViewModel.getNumberQuestionsLiveData().observe(getViewLifecycleOwner(), value -> {
-            if (binding.mainQuestionsNumberValue.getText().equals(value)) return;
+        mainViewModel.getQuestionsNumberLiveData().observe(getViewLifecycleOwner(), value -> {
+            
             binding.mainQuestionsNumberValue.setText(value);
         });
         mainViewModel.getMaxTimeLiveData().observe(getViewLifecycleOwner(), value -> {
-            if (binding.mainMaxTimeValue.getText().equals(value)) return;
+            
             binding.mainMaxTimeValue.setText(value);
-        });*/
+        });
+        /** TextView "Left Questions" ViewModel Observer*/
         mainViewModel.getLeftQuestionsLiveData().observe(getViewLifecycleOwner(), value -> {
             binding.mainLeftTimeValue.setText(value);
         });
+        /** TextView "Time Left" ViewModel Observer*/
         mainViewModel.getLeftTimeToAnswerLiveData().observe(getViewLifecycleOwner(), value -> {
             binding.mainLeftTimeValue.setText(value);
         });
+        /** TextView "Average Time" ViewModel Observer*/
         mainViewModel.getAverageTimeToAnswerLiveData().observe(getViewLifecycleOwner(), string -> {
             binding.mainAvgTimeValue.setText(string);
+        });
+    }
+    
+/*    private void initQuestionsNumber(EditText mainQuestionsNumberValue) {
+        mainQuestionsNumberValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+                String validString = mainViewModel.getValidStringFormat(charSequence);
+       
+                mainViewModel.onQuestionsNumberChanged(validString);
+                
+                Log.d(TAG, "onActivityCreated: mainQuestionsNumberValue == " + charSequence);
+            }
+            
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            
+            }
+            
+            public void afterTextChanged(Editable editable) {
+            
+            }
         });
     }
     
     private void initMaxTime() {
         binding.mainMaxTimeValue.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            
-            }
-            
-            @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                
+                mainViewModel.onMaxTimeChanged(mainViewModel.getValidStringFormat(charSequence));
+                
                 Log.d(TAG, "onActivityCreated: mainMaxTimeValue == " + charSequence);
-                if (charSequence.toString().equals("") || charSequence.toString().equals("0")) {
-                    return;
-                } else {
-                    mainViewModel.onMaxTimeChanged(charSequence.toString());
-                }
             }
             
-            @Override
-            public void afterTextChanged(Editable editable) {
-            
-            }
-        });
-    }
-    
-    private void initQuestionsNumber(EditText mainQuestionsNumberValue) {
-        mainQuestionsNumberValue.addTextChangedListener(new TextWatcher() {
-            @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
             
             }
             
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
-                
-                if (charSequence.toString().equals("") || charSequence.toString().equals("0")) {
-                    return;
-                } else {
-                    mainViewModel.onQuestionsNumberChanged(charSequence.toString());
-                }
-                Log.d(TAG, "onActivityCreated: mainQuestionsNumberValue == " + charSequence);
-            }
-            
-            @Override
             public void afterTextChanged(Editable editable) {
             
             }
         });
-    }
+    }*/
     
     private void initActionButton(Button actionButton) {
         
