@@ -8,8 +8,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +26,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 @AndroidEntryPoint
 public class MainFragment extends Fragment {
-    
+
     private static final String TAG = "#_MainFragment";
     private MainFragmentBinding binding;
     public MainViewModel mainViewModel;
@@ -38,11 +36,11 @@ public class MainFragment extends Fragment {
     private ImageButton buttonAddQuestions;
     private ImageButton buttonRemoveMaxTime;
     private ImageButton buttonAddMaxTime;
-    
+
     @Inject
     public MainFragment() {
     }
-    
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -51,27 +49,27 @@ public class MainFragment extends Fragment {
         View view = binding.getRoot();
         return view;
     }
-    
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
-        
+
         actionButton = binding.buttonMainAction;
         buttonRemoveQuestions = binding.buttonRemoveQuestions;
         buttonAddQuestions = binding.buttonAddQuestions;
         buttonRemoveMaxTime = binding.buttonRemoveMaxTime;
         buttonAddMaxTime = binding.buttonAddMaxTime;
-        
+
         EditText mainQuestionsNumberValue = binding.mainQuestionsNumberValue;
-        
+
         /** init if quiz was started */
         if (mainViewModel.getActionButtonState()) {
             actionButton.setText(R.string.main_action_button_answer);
             mainQuestionsNumberValue.setEnabled(false);
             binding.mainMaxTimeValue.setEnabled(false);
         }
-        
+
         /** init fields and buttons*/
     /*    initQuestionsNumber(mainQuestionsNumberValue);
         initMaxTime();*/
@@ -80,40 +78,58 @@ public class MainFragment extends Fragment {
         initTextFieldsObservers();
         initResetButtonAction();
         configWhenQuizStateChanged();
-        
+
+        mainViewModel.getIsFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
+            Toast.makeText(getContext(), "Quiz Finished! Duration time: " + mainViewModel.getQuizFinishedDurationTime(), Toast.LENGTH_LONG).show();
+        });
+
     }
-    
+
     private void initAscendingDescendingButtons() {
-        
+
         buttonRemoveQuestions.setOnClickListener(view -> {
-            mainViewModel.decrementQuestionsNumber();
+            mainViewModel.stepDecrementQuestionsNumber();
         });
-        
+
+        buttonRemoveQuestions.setOnLongClickListener(view -> {
+            return mainViewModel.fastDecrementQuestionsNumber();
+        });
+///////////
         buttonAddQuestions.setOnClickListener(view -> {
-            mainViewModel.incrementQuestionsNumber();
+            mainViewModel.stepIncrementQuestionsNumber();
         });
-        
+        buttonAddQuestions.setOnLongClickListener(view -> {
+            return mainViewModel.fastIncrementQuestionsNumber();
+        });
+///////////
         buttonRemoveMaxTime.setOnClickListener(view -> {
-            mainViewModel.decrementMaxTime();
+            mainViewModel.stepDecrementMaxTime();
         });
+        buttonRemoveMaxTime.setOnLongClickListener(view -> {
+            return mainViewModel.fastDecrementMaxTime();
+        });
+///////////
         buttonAddMaxTime.setOnClickListener(view -> {
-            mainViewModel.incrementMaxTime();
+            mainViewModel.stepIncrementMaxTime();
         });
-        
+        buttonAddMaxTime.setOnLongClickListener(view -> {
+            return mainViewModel.fastIncrementMaxTime();
+        });
+
     }
-    
+
     private void initTextFieldsObservers() {
         mainViewModel.getQuestionsNumberLiveData().observe(getViewLifecycleOwner(), value -> {
-            
+
             binding.mainQuestionsNumberValue.setText(value);
         });
         mainViewModel.getMaxTimeLiveData().observe(getViewLifecycleOwner(), value -> {
-            
+
             binding.mainMaxTimeValue.setText(value);
         });
         /** TextView "Left Questions" ViewModel Observer*/
         mainViewModel.getLeftQuestionsLiveData().observe(getViewLifecycleOwner(), value -> {
-            binding.mainLeftTimeValue.setText(value);
+            binding.mainQuestionsLeftValue.setText(value);
         });
         /** TextView "Time Left" ViewModel Observer*/
         mainViewModel.getLeftTimeToAnswerLiveData().observe(getViewLifecycleOwner(), value -> {
@@ -165,9 +181,9 @@ public class MainFragment extends Fragment {
             }
         });
     }*/
-    
+
     private void initActionButton(Button actionButton) {
-        
+
         actionButton.setOnClickListener(btnView -> {
             if (isQuizStarted) {
                 mainViewModel.onAnsweredPressed();
@@ -176,7 +192,7 @@ public class MainFragment extends Fragment {
             }
         });
     }
-    
+
     /**
      * Quiz is started LiveData Observer
      */
@@ -193,16 +209,15 @@ public class MainFragment extends Fragment {
                 binding.mainQuestionsNumberValue.setEnabled(true);
                 binding.mainMaxTimeValue.setEnabled(true);
             }
-            
         });
     }
-    
+
     private void initResetButtonAction() {
         binding.mainButtonReset.setOnClickListener(view -> {
             mainViewModel.onResetClicked();
             Toast.makeText(getContext(), "Quiz was sReset", Toast.LENGTH_SHORT).show();
-            binding.mainQuestionsNumberValue.setText("");
-            binding.mainMaxTimeValue.setText("");
+            binding.mainQuestionsNumberValue.setText("0");
+            binding.mainMaxTimeValue.setText("0");
         });
     }
 }
