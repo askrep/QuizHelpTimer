@@ -67,7 +67,7 @@ public class MainFragment extends Fragment {
         if (mainViewModel.getActionButtonState()) {
             actionButton.setText(R.string.main_action_button_answer);
             mainQuestionsNumberValue.setEnabled(false);
-            binding.mainMaxTimeValue.setEnabled(false);
+            binding.mainQuizDurationValue.setEnabled(false);
         }
 
         /** init fields and buttons*/
@@ -79,10 +79,22 @@ public class MainFragment extends Fragment {
         initResetButtonAction();
         configWhenQuizStateChanged();
 
-        mainViewModel.getIsFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
-            Toast.makeText(getContext(), "Quiz Finished! Duration time: " + mainViewModel.getQuizFinishedDurationTime(), Toast.LENGTH_LONG).show();
+        initIsQuizFinishedObserver();
+
+        mainViewModel.getMillisUntilFinishedLiveData().observe(getViewLifecycleOwner(), mills -> {
+            binding.mainLeftTimeValue.setText("" + mills / 1000);
         });
 
+        mainViewModel.getTimerFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
+            Toast.makeText(getContext(), "CountDown Finished", Toast.LENGTH_SHORT).show();
+        });
+
+    }
+
+    private void initIsQuizFinishedObserver() {
+        mainViewModel.getIsQuizFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
+            Toast.makeText(getContext(), "Quiz Finished! Duration time: " + mainViewModel.getQuizFinishedDurationTime(), Toast.LENGTH_LONG).show();
+        });
     }
 
     private void initAscendingDescendingButtons() {
@@ -123,9 +135,9 @@ public class MainFragment extends Fragment {
 
             binding.mainQuestionsNumberValue.setText(value);
         });
-        mainViewModel.getMaxTimeLiveData().observe(getViewLifecycleOwner(), value -> {
+        mainViewModel.getQuizDurationLiveData().observe(getViewLifecycleOwner(), value -> {
 
-            binding.mainMaxTimeValue.setText(value);
+            binding.mainQuizDurationValue.setText(value);
         });
         /** TextView "Left Questions" ViewModel Observer*/
         mainViewModel.getLeftQuestionsLiveData().observe(getViewLifecycleOwner(), value -> {
@@ -139,48 +151,11 @@ public class MainFragment extends Fragment {
         mainViewModel.getAverageTimeToAnswerLiveData().observe(getViewLifecycleOwner(), string -> {
             binding.mainAvgTimeValue.setText(string);
         });
-    }
-    
-/*    private void initQuestionsNumber(EditText mainQuestionsNumberValue) {
-        mainQuestionsNumberValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
-                String validString = mainViewModel.getValidStringFormat(charSequence);
-       
-                mainViewModel.onQuestionsNumberChanged(validString);
-                
-                Log.d(TAG, "onActivityCreated: mainQuestionsNumberValue == " + charSequence);
-            }
-            
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            
-            }
-            
-            public void afterTextChanged(Editable editable) {
-            
-            }
+
+        mainViewModel.getMillisUntilFinishedLiveData().observe(getViewLifecycleOwner(), mills -> {
+            binding.mainDurationTimeValue.setText(String.valueOf(mills / 1000));
         });
     }
-    
-    private void initMaxTime() {
-        binding.mainMaxTimeValue.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                
-                mainViewModel.onMaxTimeChanged(mainViewModel.getValidStringFormat(charSequence));
-                
-                Log.d(TAG, "onActivityCreated: mainMaxTimeValue == " + charSequence);
-            }
-            
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            
-            }
-            
-            public void afterTextChanged(Editable editable) {
-            
-            }
-        });
-    }*/
 
     private void initActionButton(Button actionButton) {
 
@@ -203,11 +178,11 @@ public class MainFragment extends Fragment {
             if (state) {
                 actionButton.setText(R.string.main_action_button_answer);
                 binding.mainQuestionsNumberValue.setEnabled(false);
-                binding.mainMaxTimeValue.setEnabled(false);
+                binding.mainQuizDurationValue.setEnabled(false);
             } else {
                 actionButton.setText(R.string.main_action_button_start);
                 binding.mainQuestionsNumberValue.setEnabled(true);
-                binding.mainMaxTimeValue.setEnabled(true);
+                binding.mainQuizDurationValue.setEnabled(true);
             }
         });
     }
@@ -217,7 +192,7 @@ public class MainFragment extends Fragment {
             mainViewModel.onResetClicked();
             Toast.makeText(getContext(), "Quiz was sReset", Toast.LENGTH_SHORT).show();
             binding.mainQuestionsNumberValue.setText("0");
-            binding.mainMaxTimeValue.setText("0");
+            binding.mainQuizDurationValue.setText("0");
         });
     }
 }
