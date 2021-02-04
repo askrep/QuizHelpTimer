@@ -81,9 +81,6 @@ public class MainFragment extends Fragment {
 
         initIsQuizFinishedObserver();
 
-        mainViewModel.getMillisUntilFinishedLiveData().observe(getViewLifecycleOwner(), mills -> {
-            binding.mainLeftTimeValue.setText("" + mills / 1000);
-        });
 
         mainViewModel.getTimerFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
             Toast.makeText(getContext(), "CountDown Finished", Toast.LENGTH_SHORT).show();
@@ -143,17 +140,18 @@ public class MainFragment extends Fragment {
         mainViewModel.getLeftQuestionsLiveData().observe(getViewLifecycleOwner(), value -> {
             binding.mainQuestionsLeftValue.setText(value);
         });
-        /** TextView "Time Left" ViewModel Observer*/
+        /** TextView "Answer Time Left" ViewModel Observer*/
         mainViewModel.getLeftTimeToAnswerLiveData().observe(getViewLifecycleOwner(), value -> {
-            binding.mainLeftTimeValue.setText(value);
+            binding.mainLeftTimeToAnswerValue.setText(value);
         });
-        /** TextView "Average Time" ViewModel Observer*/
+        /** TextView "Answer Average Time" ViewModel Observer*/
         mainViewModel.getAverageTimeToAnswerLiveData().observe(getViewLifecycleOwner(), string -> {
             binding.mainAvgTimeValue.setText(string);
         });
 
-        mainViewModel.getMillisUntilFinishedLiveData().observe(getViewLifecycleOwner(), mills -> {
-            binding.mainDurationTimeValue.setText(String.valueOf(mills / 1000));
+        mainViewModel.getCountDownTimerMsLiveData().observe(getViewLifecycleOwner(), mills -> {
+            binding.mainDurationTimeValue.setText(String.valueOf(mainViewModel.getAnswerTimeAverageMs((int) (mills / 1000))));
+
         });
     }
 

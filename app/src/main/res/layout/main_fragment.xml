@@ -126,7 +126,7 @@
 
 
         <TextView
-            android:id="@+id/main_left_time_value"
+            android:id="@+id/main_left_time_to_answer_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -161,10 +161,10 @@
             android:text=""
             android:textAlignment="center"
             android:textSize="@dimen/main_edit_text_size"
-            app:layout_constraintBottom_toBottomOf="@+id/main_left_time_value"
+            app:layout_constraintBottom_toBottomOf="@+id/main_left_time_to_answer_value"
             app:layout_constraintEnd_toEndOf="@+id/main_avg_time_title"
             app:layout_constraintStart_toStartOf="@+id/main_avg_time_title"
-            app:layout_constraintTop_toTopOf="@+id/main_left_time_value" />
+            app:layout_constraintTop_toTopOf="@+id/main_left_time_to_answer_value" />
 
         <Button
             android:id="@+id/main_button_reset"
@@ -195,13 +195,12 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/main_left_time_value" />
+            app:layout_constraintTop_toBottomOf="@+id/main_left_time_to_answer_value" />
 
         <ImageButton
             android:id="@+id/button_remove_questions"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
             app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_value"
             app:layout_constraintEnd_toStartOf="@+id/main_questions_number_value"
             app:layout_constraintTop_toTopOf="@+id/main_questions_number_value"

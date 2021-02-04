@@ -24,6 +24,7 @@ public class Repository {
     private MutableLiveData<Long> countDownTimerMsLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> countDownTimerFinishedLiveData = new MutableLiveData<>();
     private CountDownTimer countDownTimer;
+    private MutableLiveData<Long> countDownTimerAverageMsLiveData = new MutableLiveData<>();
 
     @Inject
     public Repository(LocalDataSource localDataSource, RemoteDataSource remoteDataSource) {
@@ -53,32 +54,32 @@ public class Repository {
             return (long) maxDuration / number;
         } else return -1;
     }
-
-    /**
+/*
+    *//**
      * @param millisInFuture    long: The number of millis in the future from the call to start() until the countdown is done and onFinish() is called
      * @param countDownInterval long: The interval along the way to receive onTick(long) callbacks
-     */
+     *//*
     public void startCountDownTimer(long millisInFuture, long countDownInterval) {
         if (countDownTimer != null) countDownTimer.cancel();
 
         countDownTimer = new CountDownTimer(millisInFuture, countDownInterval) {
 
-            /**
-             * @param millisUntilFinished: The amount of time until finished*/
+            *//**
+             * @param millisUntilFinished: The amount of time until finished*//*
             @Override
             public void onTick(long millisUntilFinished) {
                 countDownTimerMsLiveData.setValue(millisUntilFinished);
             }
 
-            /**
+            *//**
              * Callback fired when the time is up
-             */
+             *//*
             @Override
             public void onFinish() {
                 countDownTimerFinishedLiveData.setValue(true);
             }
         }.start();
-    }
+    }*/
 
     public LiveData<Long> getCountDownTimerMsLiveData() {
         return countDownTimerMsLiveData;
@@ -86,5 +87,9 @@ public class Repository {
 
     public LiveData<Boolean> getCountDownTimerFinishedLiveData() {
         return countDownTimerFinishedLiveData;
+    }
+
+    public LiveData<Long> countDownTimerAverageMsLiveData() {
+        return countDownTimerAverageMsLiveData;
     }
 }
