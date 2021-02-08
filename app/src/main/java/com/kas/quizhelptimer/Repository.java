@@ -38,7 +38,13 @@ public class Repository {
         int seconds = Integer.parseInt(time) * 60;
         String result = String.format("%10.1f",
                 localDataSource.calcAverageQuestionTimeInSeconds(number, seconds));
+        return result;
+    }
 
+    public String getAverageQuestionTimeMillis(String numberQuestion, long millis) {
+        int number = Integer.parseInt(numberQuestion);
+        String result = String.format("%10.1f",
+                localDataSource.calcAverageQuestionTimeInMillis(number, millis));
         return result;
     }
 
@@ -54,8 +60,8 @@ public class Repository {
             return (long) maxDuration / number;
         } else return -1;
     }
-/*
-    *//**
+    /*
+     *//**
      * @param millisInFuture    long: The number of millis in the future from the call to start() until the countdown is done and onFinish() is called
      * @param countDownInterval long: The interval along the way to receive onTick(long) callbacks
      *//*
@@ -65,22 +71,23 @@ public class Repository {
         countDownTimer = new CountDownTimer(millisInFuture, countDownInterval) {
 
             *//**
-             * @param millisUntilFinished: The amount of time until finished*//*
+     * @param millisUntilFinished: The amount of time until finished*//*
             @Override
             public void onTick(long millisUntilFinished) {
                 countDownTimerMsLiveData.setValue(millisUntilFinished);
             }
 
-            *//**
-             * Callback fired when the time is up
-             *//*
+            */
+
+    /**
+     * Callback fired when the time is up
+     *//*
             @Override
             public void onFinish() {
                 countDownTimerFinishedLiveData.setValue(true);
             }
         }.start();
     }*/
-
     public LiveData<Long> getCountDownTimerMsLiveData() {
         return countDownTimerMsLiveData;
     }

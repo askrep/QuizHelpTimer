@@ -7,14 +7,14 @@ import javax.inject.Singleton;
 
 @Singleton
 public class LocalDataSource {
-    
+
     private static final String TAG = "#_LocalDataStore";
-    
+
     @Inject
     public LocalDataSource() {
         Log.d(TAG, "LocalDataSource: created");
     }
-    
+
     /**
      * Calculating the average time per question
      *
@@ -23,5 +23,15 @@ public class LocalDataSource {
      */
     public float calcAverageQuestionTimeInSeconds(int numberQuestion, int timeSeconds) {
         return numberQuestion <= 0 || timeSeconds <= 0 ? -1 : (float) timeSeconds / numberQuestion;
+    }
+
+    /**
+     * Calculating the average time per question
+     *
+     * @param numberQuestion int
+     * @param millis         long milliseconds
+     */
+    public long calcAverageQuestionTimeInMillis(int numberQuestion, long millis) {
+        return numberQuestion <= 0 || millis <= 0 ? -1 : (long) millis / numberQuestion;
     }
 }

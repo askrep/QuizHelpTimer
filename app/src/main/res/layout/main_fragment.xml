@@ -47,7 +47,7 @@
             app:layout_constraintTop_toTopOf="@+id/main_questions_number_title" />
 
         <EditText
-            android:id="@+id/main_quiz_duration_value"
+            android:id="@+id/quiz_duration_set_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="datetime"
@@ -65,7 +65,7 @@
             android:id="@+id/main_questions_left_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/main_left_questions_title"
             android:textSize="@dimen/main_title_text_size"
             app:layout_constraintEnd_toEndOf="parent"
@@ -91,13 +91,38 @@
             android:id="@+id/main_duration_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Quiz Duration"
+            android:layout_marginTop="8dp"
+            android:text="Quiz Remaining Time"
             android:textSize="@dimen/main_title_text_size"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/main_questions_left_value" />
 
+
+        <TextView
+            android:id="@+id/main_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Quiz Start time"
+            android:textSize="@dimen/main_title_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/main_duration_time_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/main_duration_time_title" />
+
+        <TextView
+            android:id="@+id/main_start_time_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:minWidth="80dp"
+            android:singleLine="true"
+            android:text=""
+            android:textAlignment="center"
+            android:textSize="@dimen/main_edit_text_size"
+            app:layout_constraintEnd_toEndOf="@+id/main_start_time"
+            app:layout_constraintStart_toStartOf="@+id/main_start_time"
+            app:layout_constraintTop_toBottomOf="@+id/main_start_time" />
 
         <TextView
             android:id="@+id/main_duration_time_value"
@@ -113,11 +138,12 @@
             app:layout_constraintStart_toStartOf="@+id/main_duration_time_title"
             app:layout_constraintTop_toBottomOf="@+id/main_duration_time_title" />
 
+
         <TextView
             android:id="@+id/main_left_time_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="@string/main_time_left_title"
             android:textSize="@dimen/main_title_text_size"
             app:layout_constraintEnd_toEndOf="@+id/main_duration_time_title"
@@ -220,18 +246,18 @@
             android:id="@+id/button_remove_max_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/main_quiz_duration_value"
-            app:layout_constraintEnd_toStartOf="@+id/main_quiz_duration_value"
-            app:layout_constraintTop_toTopOf="@+id/main_quiz_duration_value"
+            app:layout_constraintBottom_toBottomOf="@+id/quiz_duration_set_value"
+            app:layout_constraintEnd_toStartOf="@+id/quiz_duration_set_value"
+            app:layout_constraintTop_toTopOf="@+id/quiz_duration_set_value"
             app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
 
         <ImageButton
             android:id="@+id/button_add_max_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="@+id/main_quiz_duration_value"
-            app:layout_constraintStart_toEndOf="@+id/main_quiz_duration_value"
-            app:layout_constraintTop_toTopOf="@+id/main_quiz_duration_value"
+            app:layout_constraintBottom_toBottomOf="@+id/quiz_duration_set_value"
+            app:layout_constraintStart_toEndOf="@+id/quiz_duration_set_value"
+            app:layout_constraintTop_toTopOf="@+id/quiz_duration_set_value"
             app:srcCompat="@drawable/ic_baseline_add_circle_24" />
 
 

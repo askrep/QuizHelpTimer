@@ -20,6 +20,8 @@ import android.widget.Toast;
 import com.kas.quizhelptimer.R;
 import com.kas.quizhelptimer.databinding.MainFragmentBinding;
 
+import java.time.temporal.ChronoUnit;
+
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -43,8 +45,7 @@ public class MainFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         binding = MainFragmentBinding.inflate(inflater, container, false);
         View view = binding.getRoot();
         return view;
@@ -67,7 +68,7 @@ public class MainFragment extends Fragment {
         if (mainViewModel.getActionButtonState()) {
             actionButton.setText(R.string.main_action_button_answer);
             mainQuestionsNumberValue.setEnabled(false);
-            binding.mainQuizDurationValue.setEnabled(false);
+            binding.quizDurationSetValue.setEnabled(false);
         }
 
         /** init fields and buttons*/
@@ -81,16 +82,21 @@ public class MainFragment extends Fragment {
 
         initIsQuizFinishedObserver();
 
-
-        mainViewModel.getTimerFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
+     /*   mainViewModel.getTimerFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
             Toast.makeText(getContext(), "CountDown Finished", Toast.LENGTH_SHORT).show();
-        });
+        });*/
 
+        mainViewModel.getCountDownTimerMsLiveData().observe(getViewLifecycleOwner(), mills -> {
+            binding.mainDurationTimeValue.setText(String.valueOf((int) (mills / 1000)));
+
+        });
     }
 
     private void initIsQuizFinishedObserver() {
         mainViewModel.getIsQuizFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
-            Toast.makeText(getContext(), "Quiz Finished! Duration time: " + mainViewModel.getQuizFinishedDurationTime(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(),
+                    "Quiz Finished! Duration time: " + mainViewModel.getQuizFinishedDurationTime(),
+                    Toast.LENGTH_LONG).show();
         });
     }
 
@@ -132,9 +138,9 @@ public class MainFragment extends Fragment {
 
             binding.mainQuestionsNumberValue.setText(value);
         });
-        mainViewModel.getQuizDurationLiveData().observe(getViewLifecycleOwner(), value -> {
+        mainViewModel.getQuizDurationMinutesLiveData().observe(getViewLifecycleOwner(), value -> {
 
-            binding.mainQuizDurationValue.setText(value);
+            binding.quizDurationSetValue.setText(value);
         });
         /** TextView "Left Questions" ViewModel Observer*/
         mainViewModel.getLeftQuestionsLiveData().observe(getViewLifecycleOwner(), value -> {
@@ -145,13 +151,13 @@ public class MainFragment extends Fragment {
             binding.mainLeftTimeToAnswerValue.setText(value);
         });
         /** TextView "Answer Average Time" ViewModel Observer*/
-        mainViewModel.getAverageTimeToAnswerLiveData().observe(getViewLifecycleOwner(), string -> {
+        mainViewModel.getAverageTimeToAnswerSecondsLiveData().observe(getViewLifecycleOwner(), string -> {
             binding.mainAvgTimeValue.setText(string);
         });
 
-        mainViewModel.getCountDownTimerMsLiveData().observe(getViewLifecycleOwner(), mills -> {
-            binding.mainDurationTimeValue.setText(String.valueOf(mainViewModel.getAnswerTimeAverageMs((int) (mills / 1000))));
-
+        /**TextView "QUIZ START TIME" */
+        mainViewModel.getStartTimeLiveData().observe(getViewLifecycleOwner(), time -> {
+            binding.mainStartTimeValue.setText(time.truncatedTo(ChronoUnit.SECONDS).toString());
         });
     }
 
@@ -176,11 +182,11 @@ public class MainFragment extends Fragment {
             if (state) {
                 actionButton.setText(R.string.main_action_button_answer);
                 binding.mainQuestionsNumberValue.setEnabled(false);
-                binding.mainQuizDurationValue.setEnabled(false);
+                binding.quizDurationSetValue.setEnabled(false);
             } else {
                 actionButton.setText(R.string.main_action_button_start);
                 binding.mainQuestionsNumberValue.setEnabled(true);
-                binding.mainQuizDurationValue.setEnabled(true);
+                binding.quizDurationSetValue.setEnabled(true);
             }
         });
     }
@@ -190,7 +196,7 @@ public class MainFragment extends Fragment {
             mainViewModel.onResetClicked();
             Toast.makeText(getContext(), "Quiz was sReset", Toast.LENGTH_SHORT).show();
             binding.mainQuestionsNumberValue.setText("0");
-            binding.mainQuizDurationValue.setText("0");
+            binding.quizDurationSetValue.setText("0");
         });
     }
 }
