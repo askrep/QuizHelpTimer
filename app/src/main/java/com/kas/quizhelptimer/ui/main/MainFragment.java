@@ -94,9 +94,10 @@ public class MainFragment extends Fragment {
 
     private void initIsQuizFinishedObserver() {
         mainViewModel.getIsQuizFinishedLiveData().observe(getViewLifecycleOwner(), isFinished -> {
-            Toast.makeText(getContext(),
-                    "Quiz Finished! Duration time: " + mainViewModel.getQuizFinishedDurationTime(),
-                    Toast.LENGTH_LONG).show();
+            if (isFinished) {
+                Toast.makeText(getContext(), "Quiz Finished! Duration time: " +
+                        mainViewModel.getQuizFinishedDurationTime(), Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -151,9 +152,10 @@ public class MainFragment extends Fragment {
             binding.mainLeftTimeToAnswerValue.setText(value);
         });
         /** TextView "Answer Average Time" ViewModel Observer*/
-        mainViewModel.getAverageTimeToAnswerSecondsLiveData().observe(getViewLifecycleOwner(), string -> {
-            binding.mainAvgTimeValue.setText(string);
-        });
+        mainViewModel.getAverageTimeToAnswerSecondsLiveData().observe(getViewLifecycleOwner(),
+                string -> {
+                    binding.mainAvgTimeValue.setText(string);
+                });
 
         /**TextView "QUIZ START TIME" */
         mainViewModel.getStartTimeLiveData().observe(getViewLifecycleOwner(), time -> {

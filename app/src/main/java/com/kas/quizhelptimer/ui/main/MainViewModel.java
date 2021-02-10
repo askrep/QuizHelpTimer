@@ -17,13 +17,14 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
+
+
+//TODO need to refactoring the view model and repository
 @HiltViewModel
 public class MainViewModel extends ViewModel {
 
     private static final String TAG = "#_MainViewModel";
     private Repository repository;
-
-    private LocalTime startLocalTime;
 
     /* VIEW FIELDS LIVE DATA*/
     private MutableLiveData<String> questionsNumberLiveData = new MutableLiveData<>("0");
@@ -43,19 +44,17 @@ public class MainViewModel extends ViewModel {
     ;
 
     private MutableLiveData<Long> countDownTimerMsLiveData = new MutableLiveData<>(0L);
-    private MutableLiveData<Long> countDownTimerAverageMsLiveData;
+
+    private LocalTime startLocalTime;
 
     private CountDownTimer countDownTimer;
 
     private String quizFinishedDurationTime;
-    private Long testNow = new Long(0L);
+    private Long testNow = 0L;
 
     @Inject
     public MainViewModel(Repository repository) {
         this.repository = repository;
- /*       countDownTimerMsLiveData = repository.getCountDownTimerMsLiveData();
-        countDownTimerAverageMsLiveData = repository.countDownTimerAverageMsLiveData();
-        timerFinishedLiveData = repository.getCountDownTimerFinishedLiveData();*/
     }
 
     public void onStartPressed() {
@@ -77,15 +76,15 @@ public class MainViewModel extends ViewModel {
 
     public void onAnsweredPressed() {
         calculateLeftQuestionsNumber();
-        String numStr = questionsNumberLiveData.getValue();
-        int number = Integer.parseInt(numStr);
 
-        averageTimeToAnswerSecondsLiveData.setValue(String.valueOf(
-                (countDownTimerMsLiveData.getValue() /
-                        Integer.parseInt(leftQuestionsLiveData.getValue())) / 1000));
-
-        testNow = countDownTimerMsLiveData.getValue();
-
+        String value = leftQuestionsLiveData.getValue();
+        if (!value.equals("") && !value.equals("0")) {
+            averageTimeToAnswerSecondsLiveData.setValue(String.valueOf(
+                    (countDownTimerMsLiveData.getValue() / Integer.parseInt(value)) / 1000));
+            testNow = countDownTimerMsLiveData.getValue();
+        } else {
+            isQuizFinished();
+        }
 
     }
 
@@ -103,7 +102,6 @@ public class MainViewModel extends ViewModel {
             public void onTick(long millisUntilFinished) {
                 countDownTimerMsLiveData.setValue(millisUntilFinished);
 
-                //TODO Add QuizRemainingTimer and AnswerRemainingTimeAverage avg = D- (T0 + tavg)
                 long ms = millisUntilFinished - (testNow -
                         Long.parseLong(averageTimeToAnswerSecondsLiveData.getValue().trim()) *
                                 1000);
@@ -116,7 +114,8 @@ public class MainViewModel extends ViewModel {
              */
             @Override
             public void onFinish() {
-                timerFinishedLiveData.setValue(true);
+                isQuizFinished();
+
             }
         }.start();
     }
@@ -131,25 +130,22 @@ public class MainViewModel extends ViewModel {
                 //startQuizDurationTimerMs();
             } else if (num == 1) {
                 leftQuestionsLiveData.setValue("0");
-                quizFinishedDurationTime = isQuizFinished();
             }
         }
     }
 
-    private String isQuizFinished() {
-        isFinishedLiveData.setValue(true);
-        resetWhenFinished();
+    private void isQuizFinished() {
+
         LocalTime finishLocalTime = LocalTime.now();
-        return getQuizTimeDuration(startLocalTime, finishLocalTime).toString();
+        quizFinishedDurationTime = getQuizTimeDuration(startTimeLiveData.getValue(),
+                finishLocalTime).toString();
+        resetWhenFinished();
+        isFinishedLiveData.setValue(true);
     }
 
     private LocalTime getQuizTimeDuration(LocalTime start, LocalTime finish) {
-        LocalTime duration = finish.minusHours(startLocalTime.getHour()).minusMinutes(
-                startLocalTime.getMinute()).minusSeconds(startLocalTime.getSecond());
-
-        duration = LocalTime.ofSecondOfDay(countDownTimerMsLiveData.getValue()/1000);
-        Log.d(TAG, "getQuizTimeDuration: start==" + start + "; finish==" + finish + "; duration==" +
-                duration);
+        LocalTime duration = LocalTime.ofSecondOfDay(
+                finish.toSecondOfDay() - start.toSecondOfDay());
         return duration;
     }
 
@@ -157,16 +153,18 @@ public class MainViewModel extends ViewModel {
         isQuizStartedLiveData.setValue(false);
         questionsNumberLiveData.setValue("1");
         quizDurationMinutesLiveData.setValue("1");
-        leftQuestionsLiveData.setValue("");
-        leftTimeToAnswerLiveData.setValue("");
-        averageTimeToAnswerSecondsLiveData.setValue("");
+        leftQuestionsLiveData.setValue("0");
+        leftTimeToAnswerLiveData.setValue("0");
+        averageTimeToAnswerSecondsLiveData.setValue("0");
         countDownTimer.cancel();
+        isFinishedLiveData.setValue(false);
         Log.d(TAG, "onResetClicked: ");
 
     }
 
     public boolean onResetClicked() {
         isQuizStartedLiveData.setValue(false);
+        isFinishedLiveData.setValue(false);
         questionsNumberLiveData.setValue("1");
         quizDurationMinutesLiveData.setValue("1");
         leftQuestionsLiveData.setValue("");
