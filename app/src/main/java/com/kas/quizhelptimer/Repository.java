@@ -8,46 +8,60 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.kas.quizhelptimer.data.LocalDataSource;
 import com.kas.quizhelptimer.data.RemoteDataSource;
+import com.kas.quizhelptimer.db.Question;
+import com.kas.quizhelptimer.db.QuizDao;
 
 import java.net.HttpCookie;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-@Singleton
 public class Repository {
-
+    
     private static final String TAG = "#_Repository";
-    private LocalDataSource localDataSource;
+    
+    private QuizDao quizDao;
     private RemoteDataSource remoteDataSource;
-
+    
     private MutableLiveData<Long> countDownTimerMsLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> countDownTimerFinishedLiveData = new MutableLiveData<>();
-    private CountDownTimer countDownTimer;
+    
     private MutableLiveData<Long> countDownTimerAverageMsLiveData = new MutableLiveData<>();
-
+    
     @Inject
-    public Repository(LocalDataSource localDataSource, RemoteDataSource remoteDataSource) {
-        this.localDataSource = localDataSource;
+    public Repository(QuizDao quizDao, RemoteDataSource remoteDataSource) {
+        this.quizDao = quizDao;
         this.remoteDataSource = remoteDataSource;
         Log.d(TAG, "Repository: created");
     }
-
-    public String getAverageQuestionTime(String numberQuestion, String time) {
-        int number = Integer.parseInt(numberQuestion);
-        int seconds = Integer.parseInt(time) * 60;
-        String result = String.format("%10.1f",
-                localDataSource.calcAverageQuestionTimeInSeconds(number, seconds));
-        return result;
+    
+    /**
+     * Return LiveData Questions List from database
+     *
+     * @return LiveData
+     */
+    public LiveData<List<Question>> getAllQuestions() {
+        return quizDao.getAllQuestions();
     }
-
-    public String getAverageQuestionTimeMillis(String numberQuestion, long millis) {
-        int number = Integer.parseInt(numberQuestion);
-        String result = String.format("%10.1f",
-                localDataSource.calcAverageQuestionTimeInMillis(number, millis));
-        return result;
+    
+    /**
+     * Return LiveData Question with particular number from database
+     *
+     * @return LiveData
+     */
+    public LiveData<Question> getQuestionByNumber(int number) {
+        return quizDao.getQuestionByNumber(number);
     }
-
+    
+    /**
+     * Insert Question with particular number from database
+     *
+     * @return LiveData
+     */
+    public void insertQuestion(Question question){
+        quizDao.insertQuestion(question);
+    }
     /**
      * Return -1 if  number <= 0 or @param maxDuration <= 0
      *
@@ -60,43 +74,5 @@ public class Repository {
             return (long) maxDuration / number;
         } else return -1;
     }
-    /*
-     *//**
-     * @param millisInFuture    long: The number of millis in the future from the call to start() until the countdown is done and onFinish() is called
-     * @param countDownInterval long: The interval along the way to receive onTick(long) callbacks
-     *//*
-    public void startCountDownTimer(long millisInFuture, long countDownInterval) {
-        if (countDownTimer != null) countDownTimer.cancel();
-
-        countDownTimer = new CountDownTimer(millisInFuture, countDownInterval) {
-
-            *//**
-     * @param millisUntilFinished: The amount of time until finished*//*
-            @Override
-            public void onTick(long millisUntilFinished) {
-                countDownTimerMsLiveData.setValue(millisUntilFinished);
-            }
-
-            */
-
-    /**
-     * Callback fired when the time is up
-     *//*
-            @Override
-            public void onFinish() {
-                countDownTimerFinishedLiveData.setValue(true);
-            }
-        }.start();
-    }*/
-    public LiveData<Long> getCountDownTimerMsLiveData() {
-        return countDownTimerMsLiveData;
-    }
-
-    public LiveData<Boolean> getCountDownTimerFinishedLiveData() {
-        return countDownTimerFinishedLiveData;
-    }
-
-    public LiveData<Long> countDownTimerAverageMsLiveData() {
-        return countDownTimerAverageMsLiveData;
-    }
+    
 }
