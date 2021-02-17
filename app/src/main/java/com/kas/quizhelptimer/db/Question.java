@@ -1,19 +1,20 @@
 package com.kas.quizhelptimer.db;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalTime;
 
-@Entity(tableName = "first_quiz")
+@Entity(tableName = "quiz")
 public class Question {
     
     @PrimaryKey(autoGenerate = false)
     private int questionNumber;
-    private LocalTime startedAt;
-    private LocalTime answeredAt;
+    private String startedAt;
+    private String answeredAt;
     
-    public Question(int questionNumber, LocalTime startedAt, LocalTime answeredAt) {
+    public Question(int questionNumber, String startedAt, String answeredAt) {
         this.questionNumber = questionNumber;
         this.startedAt = startedAt;
         this.answeredAt = answeredAt;
@@ -27,19 +28,19 @@ public class Question {
         this.questionNumber = questionNumber;
     }
     
-    public LocalTime getStartedAt() {
+    public String getStartedAt() {
         return startedAt;
     }
     
-    public void setStartedAt(LocalTime startedAt) {
+    public void setStartedAt(String startedAt) {
         this.startedAt = startedAt;
     }
     
-    public LocalTime getAnsweredAt() {
+    public String getAnsweredAt() {
         return answeredAt;
     }
     
-    public void setAnsweredAt(LocalTime answeredAt) {
+    public void setAnsweredAt(String answeredAt) {
         this.answeredAt = answeredAt;
     }
 }

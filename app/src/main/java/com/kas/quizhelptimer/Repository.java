@@ -1,21 +1,17 @@
 package com.kas.quizhelptimer;
 
-import android.os.CountDownTimer;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.kas.quizhelptimer.data.LocalDataSource;
 import com.kas.quizhelptimer.data.RemoteDataSource;
 import com.kas.quizhelptimer.db.Question;
 import com.kas.quizhelptimer.db.QuizDao;
 
-import java.net.HttpCookie;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 public class Repository {
     
