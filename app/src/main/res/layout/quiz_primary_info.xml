@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_begin="20dp"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <TextView
+            android:id="@+id/main_questions_number_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/main_number_questions_title"
+            android:textSize="@dimen/main_title_text_size"
+            app:layout_constraintEnd_toStartOf="@+id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/main_questions_number_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:inputType="numberDecimal"
+            android:minWidth="80dp"
+            android:singleLine="true"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="@dimen/main_edit_text_size"
+            app:layout_constraintEnd_toEndOf="@+id/main_questions_number_title"
+            app:layout_constraintStart_toStartOf="@+id/main_questions_number_title"
+            app:layout_constraintTop_toBottomOf="@+id/main_questions_number_title" />
+
+        <TextView
+            android:id="@+id/main_quiz_duration_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/main_max_time_title"
+            android:textSize="@dimen/main_title_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="@+id/main_questions_number_title" />
+
+        <EditText
+            android:id="@+id/quiz_duration_set_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="datetime"
+            android:minWidth="80dp"
+            android:singleLine="true"
+            android:text="1"
+            android:textAlignment="center"
+            android:textSize="@dimen/main_edit_text_size"
+            app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_value"
+            app:layout_constraintEnd_toEndOf="@+id/main_quiz_duration_title"
+            app:layout_constraintStart_toStartOf="@+id/main_quiz_duration_title"
+            app:layout_constraintTop_toTopOf="@+id/main_questions_number_value" />
+
+        <ImageButton
+            android:id="@+id/button_remove_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_value"
+            app:layout_constraintEnd_toStartOf="@+id/main_questions_number_value"
+            app:layout_constraintTop_toTopOf="@+id/main_questions_number_value"
+            app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
+
+        <ImageButton
+            android:id="@+id/button_add_questions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/main_questions_number_value"
+            app:layout_constraintStart_toEndOf="@+id/main_questions_number_value"
+            app:layout_constraintTop_toTopOf="@+id/main_questions_number_value"
+
+            app:srcCompat="@drawable/ic_baseline_add_circle_24" />
+
+        <ImageButton
+            android:id="@+id/button_remove_max_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/quiz_duration_set_value"
+            app:layout_constraintEnd_toStartOf="@+id/quiz_duration_set_value"
+            app:layout_constraintTop_toTopOf="@+id/quiz_duration_set_value"
+            app:srcCompat="@drawable/ic_baseline_remove_circle_24" />
+
+        <ImageButton
+            android:id="@+id/button_add_max_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/quiz_duration_set_value"
+            app:layout_constraintStart_toEndOf="@+id/quiz_duration_set_value"
+            app:layout_constraintTop_toTopOf="@+id/quiz_duration_set_value"
+            app:srcCompat="@drawable/ic_baseline_add_circle_24" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

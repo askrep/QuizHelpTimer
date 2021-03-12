@@ -56,19 +56,19 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
-        actionButton = binding.buttonMainAction;
-        buttonRemoveQuestions = binding.buttonRemoveQuestions;
-        buttonAddQuestions = binding.buttonAddQuestions;
-        buttonRemoveMaxTime = binding.buttonRemoveMaxTime;
-        buttonAddMaxTime = binding.buttonAddMaxTime;
+        actionButton = binding.quizControls.buttonMainAction;
+        buttonRemoveQuestions = binding.quizPrimaryInfo.buttonRemoveQuestions;
+        buttonAddQuestions = binding.quizPrimaryInfo.buttonAddQuestions;
+        buttonRemoveMaxTime = binding.quizPrimaryInfo.buttonRemoveMaxTime;
+        buttonAddMaxTime = binding.quizPrimaryInfo.buttonAddMaxTime;
 
-        EditText mainQuestionsNumberValue = binding.mainQuestionsNumberValue;
+        EditText mainQuestionsNumberValue = binding.quizPrimaryInfo.mainQuestionsNumberValue;
 
         /** init if quiz was started */
         if (mainViewModel.getActionButtonState()) {
             actionButton.setText(R.string.main_action_button_answer);
             mainQuestionsNumberValue.setEnabled(false);
-            binding.quizDurationSetValue.setEnabled(false);
+            binding.quizPrimaryInfo.quizDurationSetValue.setEnabled(false);
         }
 
         /** init fields and buttons*/
@@ -87,7 +87,7 @@ public class MainFragment extends Fragment {
         });*/
 
         mainViewModel.getCountDownTimerMsLiveData().observe(getViewLifecycleOwner(), mills -> {
-            binding.mainDurationTimeValue.setText(String.valueOf((int) (mills / 1000)));
+            binding.quizActiveInfo.mainDurationTimeValue.setText(String.valueOf((int) (mills / 1000)));
 
         });
     }
@@ -137,29 +137,29 @@ public class MainFragment extends Fragment {
     private void initTextFieldsObservers() {
         mainViewModel.getQuestionsNumberLiveData().observe(getViewLifecycleOwner(), value -> {
 
-            binding.mainQuestionsNumberValue.setText(value);
+            binding.quizPrimaryInfo.mainQuestionsNumberValue.setText(value);
         });
         mainViewModel.getQuizDurationMinutesLiveData().observe(getViewLifecycleOwner(), value -> {
 
-            binding.quizDurationSetValue.setText(value);
+            binding.quizPrimaryInfo.quizDurationSetValue.setText(value);
         });
         /** TextView "Left Questions" ViewModel Observer*/
         mainViewModel.getLeftQuestionsLiveData().observe(getViewLifecycleOwner(), value -> {
-            binding.mainQuestionsLeftValue.setText(value);
+            binding.quizActiveInfo.mainQuestionsLeftValue.setText(value);
         });
         /** TextView "Answer Time Left" ViewModel Observer*/
         mainViewModel.getLeftTimeToAnswerLiveData().observe(getViewLifecycleOwner(), value -> {
-            binding.mainLeftTimeToAnswerValue.setText(value);
+            binding.quizActiveInfo.mainLeftTimeToAnswerValue.setText(value);
         });
         /** TextView "Answer Average Time" ViewModel Observer*/
         mainViewModel.getAverageTimeToAnswerSecondsLiveData().observe(getViewLifecycleOwner(),
                 string -> {
-                    binding.mainAvgTimeValue.setText(string);
+                    binding.quizActiveInfo.mainAvgTimeValue.setText(string);
                 });
 
         /**TextView "QUIZ START TIME" */
         mainViewModel.getStartTimeLiveData().observe(getViewLifecycleOwner(), time -> {
-            binding.mainStartTimeValue.setText(time.truncatedTo(ChronoUnit.SECONDS).toString());
+            binding.quizActiveInfo.mainStartTimeValue.setText(time.truncatedTo(ChronoUnit.SECONDS).toString());
         });
     }
 
@@ -183,22 +183,22 @@ public class MainFragment extends Fragment {
             Log.d(TAG, "configWhenQuizStateChanged: " + state);
             if (state) {
                 actionButton.setText(R.string.main_action_button_answer);
-                binding.mainQuestionsNumberValue.setEnabled(false);
-                binding.quizDurationSetValue.setEnabled(false);
+                binding.quizPrimaryInfo.mainQuestionsNumberValue.setEnabled(false);
+                binding.quizPrimaryInfo.quizDurationSetValue.setEnabled(false);
             } else {
                 actionButton.setText(R.string.main_action_button_start);
-                binding.mainQuestionsNumberValue.setEnabled(true);
-                binding.quizDurationSetValue.setEnabled(true);
+                binding.quizPrimaryInfo.mainQuestionsNumberValue.setEnabled(true);
+                binding.quizPrimaryInfo.quizDurationSetValue.setEnabled(true);
             }
         });
     }
 
     private void initResetButtonAction() {
-        binding.mainButtonReset.setOnClickListener(view -> {
+        binding.quizControls.mainButtonReset.setOnClickListener(view -> {
             mainViewModel.onResetClicked();
             Toast.makeText(getContext(), "Quiz was sReset", Toast.LENGTH_SHORT).show();
-            binding.mainQuestionsNumberValue.setText("0");
-            binding.quizDurationSetValue.setText("0");
+            binding.quizPrimaryInfo.mainQuestionsNumberValue.setText("0");
+            binding.quizPrimaryInfo.quizDurationSetValue.setText("0");
         });
     }
 }
