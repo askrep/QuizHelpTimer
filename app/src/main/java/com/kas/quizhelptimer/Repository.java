@@ -5,6 +5,7 @@ import android.util.Log;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
+import com.kas.quizhelptimer.data.LocalDataSource;
 import com.kas.quizhelptimer.data.RemoteDataSource;
 import com.kas.quizhelptimer.db.Question;
 import com.kas.quizhelptimer.db.QuizDao;
@@ -17,17 +18,16 @@ public class Repository {
     
     private static final String TAG = "#_Repository";
     
-    private QuizDao quizDao;
+    private LocalDataSource localDataSource;
     private RemoteDataSource remoteDataSource;
     
     private MutableLiveData<Long> countDownTimerMsLiveData = new MutableLiveData<>();
     private MutableLiveData<Boolean> countDownTimerFinishedLiveData = new MutableLiveData<>();
-    
     private MutableLiveData<Long> countDownTimerAverageMsLiveData = new MutableLiveData<>();
     
     @Inject
-    public Repository(QuizDao quizDao, RemoteDataSource remoteDataSource) {
-        this.quizDao = quizDao;
+    public Repository(LocalDataSource localDataSource, RemoteDataSource remoteDataSource) {
+        this.localDataSource = localDataSource;
         this.remoteDataSource = remoteDataSource;
         Log.d(TAG, "Repository: created");
     }
@@ -38,7 +38,7 @@ public class Repository {
      * @return LiveData
      */
     public LiveData<List<Question>> getAllQuestions() {
-        return quizDao.getAllQuestions();
+        return localDataSource.getAllQuestions();
     }
     
     /**
@@ -47,7 +47,7 @@ public class Repository {
      * @return LiveData
      */
     public LiveData<Question> getQuestionByNumber(int number) {
-        return quizDao.getQuestionByNumber(number);
+        return localDataSource.getQuestionByNumber(number);
     }
     
     /**
@@ -55,9 +55,10 @@ public class Repository {
      *
      * @return LiveData
      */
-    public void insertQuestion(Question question){
-        quizDao.insertQuestion(question);
+    public void insertQuestion(Question question) {
+        localDataSource.insertQuestion(question);
     }
+    
     /**
      * Return -1 if  number <= 0 or @param maxDuration <= 0
      *
